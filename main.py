@@ -9,7 +9,7 @@ VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
 
 @app.route('/webhook', methods=['GET','POST'])
 def webhook():
-    if request.method == 'GET' and request.args.get('hub.access_token') == os.environ['VERIFY_TOKEN']:
+    if request.method == 'GET' and request.args.get('hub.verify_token') == os.environ['VERIFY_TOKEN']:
         return request.args.get('hub.challenge')
 
     data = request.get_json()
