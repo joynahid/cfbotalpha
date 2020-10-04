@@ -61,7 +61,7 @@ class makeRatingChangeMessage:
                 
                 return (0,0,4) #Didn't Participate
             else:
-                if 'comment' in is_rating_changed and 'isn\'t finished yet' not in is_rating_changed:
+                if 'comment' in is_rating_changed and 'finished yet' not in is_rating_changed['comment']:
                     return (0,0,2)
 
             rated_userlist = user_api.ratedList(self.contest_id)
