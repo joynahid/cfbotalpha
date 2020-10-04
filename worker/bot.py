@@ -65,14 +65,14 @@ Shows the rating change of the last/ running contest. Extremely useful when you 
         if len(res) == 1:
             handle = res[0][9:].strip().split()[0]
 
-            if res['status'] == 'FAILED':
+            verify_res = user_api.info(handle)
+
+            if verify_res['status'] == 'FAILED':
                 return '{} not found'.format(handle)
 
             db.collection('profiles').document(self.sender).set({
                 'username': handle
             })
-
-            res = user_api.info(handle)
 
             msg = f'{handle} remembered. :D'
 
