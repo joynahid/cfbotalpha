@@ -57,12 +57,12 @@ class user:
 
         res.encoding = 'utf-8'
 
-        # with  as res:
-        #     local_filename = f"worker/chunkstore/{contest_id}_{'user_ratedList'}"
-        #     res.raise_for_status()
-        #     with open(local_filename, 'wb') as f:
-        #         for chunk in res.iter_content(chunk_size=2000):
-        #             f.write(chunk)
+        with  as res:
+            local_filename = f"worker/cache/{contest_id}_{'user_ratedList'}_.json"
+            res.raise_for_status()
+            with open(local_filename, 'wb') as f:
+                for chunk in res.iter_content(chunk_size=500):
+                    f.write(chunk)
 
         cacheMaster.makeCache(contest_id, 'user_ratedList', res)
 

@@ -1,5 +1,5 @@
 import requests,os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from worker.bot import commandProcessor
 from worker.facebook_api import facebook
 app = Flask(__name__)
@@ -15,6 +15,8 @@ def index():
 def webhook():
     if request.method == 'GET' and request.args.get('hub.verify_token') == os.environ['VERIFY_TOKEN']:
         return request.args.get('hub.challenge')
+    elif request.method == 'GET':
+        return redirect(url_for('index'))
 
     data = request.get_json()
 
