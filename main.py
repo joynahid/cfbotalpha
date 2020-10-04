@@ -1,7 +1,7 @@
 import requests,os
 from flask import Flask, request, render_template, redirect, url_for
-from worker.bot import commandProcessor
-from worker.facebook_api import facebook
+from controllers.processor import jobDistributor
+from controllers.facebook_api import facebook
 app = Flask(__name__)
 
 TOKEN = os.environ['TOKEN']
@@ -24,7 +24,7 @@ def webhook():
         message = data['entry'][0]['messaging'][0]['message']['text']
         sender = data['entry'][0]['messaging'][0]['sender']['id']
 
-        bot = commandProcessor(message,sender)
+        bot = jobDistributor(message,sender)
 
         made_msg = bot.find_and_execute_command()
 

@@ -1,8 +1,8 @@
 import re, os, random
-from worker.generator import makeRatingChangeMessage
+from controllers.rating_change_controller import makeRatingChangeMessage
 import firebase_admin
 from firebase_admin import credentials, firestore
-from worker.codeforces_api import user_api
+from controllers.codeforces_api import userApi
 
 cred = credentials.Certificate({
     "type": "service_account",
@@ -32,7 +32,7 @@ RATE = r'rate'
 REMEMBER_HANDLE = r'remember [a-z-_0-9]{1,}'
 
 
-class commandProcessor:
+class jobDistributor:
     def __init__(self, message, sender=None):
         self.raw_message = message.lower()
         self.sender = str(sender)
@@ -65,7 +65,7 @@ Shows the rating change of the last/ running contest. Extremely useful when you 
         if len(res) == 1:
             handle = res[0][9:].strip().split()[0]
 
-            verify_res = user_api.info(handle)
+            verify_res = userApi.info(handle)
 
             if verify_res['status'] == 'FAILED':
                 return '{} not found'.format(handle)

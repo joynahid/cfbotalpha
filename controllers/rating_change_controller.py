@@ -1,6 +1,6 @@
 import requests, time
-from worker.calculator import CodeforcesRatingCalculator
-from worker.codeforces_api import contest_api, user_api
+from controllers.rating_calculator import CodeforcesRatingCalculator
+from controllers.codeforces_api import contestApi, userApi
 
 CF_CONTEST_URL = 'https://codeforces.com/api/contest.standings'
 
@@ -41,7 +41,7 @@ class makeRatingChangeMessage:
         return None
 
     def get_latest_contestid(self):
-        lis = contest_api.list()
+        lis = contestApi.list()
         for i in lis['result']:
             if i['phase'] != 'BEFORE':
                 self.contest_id = str(i['id'])
@@ -51,7 +51,7 @@ class makeRatingChangeMessage:
         try:
             past = time.time()
             
-            is_rating_changed = contest_api.ratingChanges(self.contest_id)
+            is_rating_changed = contestApi.ratingChanges(self.contest_id)
 
             if is_rating_changed['status'] == 'OK' and is_rating_changed['result']:
                 for user in is_rating_changed['result']:
@@ -63,9 +63,9 @@ class makeRatingChangeMessage:
                 if 'comment' in is_rating_changed and 'finished yet' not in is_rating_changed['comment']:
                     return (0,0,2)
 
-            rated_userlist = user_api.ratedList(self.contest_id)
+            rated_userlist = userApi.ratedList(self.contest_id)
             print('success ratedList')
-            current_ranklist = contest_api.standings(self.contest_id)
+            current_ranklist = contestApi.standings(self.contest_id)
             print('success standings')
 
             current_rating = {}

@@ -1,4 +1,4 @@
-from worker.bot import commandProcessor
+from controllers.processor import jobDistributor as commandProcessor
 
 # Write tests here for testing the bot
 

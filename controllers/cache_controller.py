@@ -1,6 +1,6 @@
 from flask import json
 
-BASE_LOCATION = "worker/cache/"
+BASE_LOCATION = "cache/"
 
 class cacheHandler:
     def makeCache(self,contest_id, type_, response):

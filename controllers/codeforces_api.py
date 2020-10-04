@@ -1,7 +1,7 @@
 from flask import json
 import requests
-from worker.cacher import cacheMaster
-from worker.facebook_api import facebook
+from controllers.cache_controller import cacheMaster
+from controllers.facebook_api import facebook
 
 API_BASE_URL = 'https://codeforces.com/api/'
 CONTEST_BASE_URL = 'https://codeforces.com/contest/'
@@ -57,12 +57,12 @@ class user:
 
         res.encoding = 'utf-8'
 
-        with  as res:
-            local_filename = f"worker/cache/{contest_id}_{'user_ratedList'}_.json"
-            res.raise_for_status()
-            with open(local_filename, 'wb') as f:
-                for chunk in res.iter_content(chunk_size=500):
-                    f.write(chunk)
+        # with  as res:
+        #     local_filename = f"worker/cache/{contest_id}_{'user_ratedList'}_.json"
+        #     res.raise_for_status()
+        #     with open(local_filename, 'wb') as f:
+        #         for chunk in res.iter_content(chunk_size=500):
+        #             f.write(chunk)
 
         cacheMaster.makeCache(contest_id, 'user_ratedList', res)
 
@@ -73,5 +73,5 @@ class user:
         res.encoding = 'utf-8'
         return res.json()
 
-contest_api = contest()
-user_api = user()
+contestApi = contest()
+userApi = user()
