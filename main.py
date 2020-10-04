@@ -1,11 +1,15 @@
 import requests,os
-from flask import Flask, request
+from flask import Flask, request, render_template
 from worker.bot import commandProcessor
 from worker.facebook_api import facebook
 app = Flask(__name__)
 
 TOKEN = os.environ['TOKEN']
 VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/webhook', methods=['GET','POST'])
 def webhook():

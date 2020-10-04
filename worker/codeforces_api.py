@@ -68,5 +68,10 @@ class user:
 
         return res.json()
 
+    def info(self, cf_handle):
+        res = requests.get(API_BASE_URL + 'user.info?handles=' + cf_handle)
+        res.encoding = 'utf-8'
+        return res.json()
+
 contest_api = contest()
 user_api = user()

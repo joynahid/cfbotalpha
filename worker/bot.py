@@ -2,6 +2,7 @@ import re, os, random
 from worker.generator import makeRatingChangeMessage
 import firebase_admin
 from firebase_admin import credentials, firestore
+from worker.codeforces_api import user_api
 
 cred = credentials.Certificate({
     "type": "service_account",
@@ -42,32 +43,36 @@ class commandProcessor:
         if len(res) == 1:
             help_text = """CFBOT αlpha
 
-Write in any format (Case is not sensitive)
+rate <contestid> <handle>
+Shows rating change of <handle> in contest <contestid>
 
-'rate contestid handle'
-Shows rating change of 'handle' in contest 'contestid'.
-
-'remember handle'
+remember <handle>
 Remembers your handle to enable querying without typing your handle everytime.
 
-'rate contestid'
-Shows rating change of a 'contestid'. It needs to remember handle first
+rate <contestid>
+Shows rating change of a <contestid>. It needs to remember <handle> first
 
-'rate'
-Shows the rating change of the last rated contest. Extremely useful when you want to know the predicted rating change real quick. Depends on remember me command.
+<rate>
+Shows the rating change of the last/ running contest. Extremely useful when you want to know the predicted rating change real quick. Depends on remember <handle> command.
             """
 
             help_text = help_text.strip()
 
             msg = help_text
-            return msg, 'Now send me- Rate 235 tourist ;)'
+            return msg, 'Now send me \'Remember <yourcfhandle>\' ;)'
 
         res = re.findall(REMEMBER_HANDLE, self.raw_message)
         if len(res) == 1:
             handle = res[0][9:].strip().split()[0]
+
+            if res['status'] == 'FAILED':
+                return '{} not found'.format(handle)
+
             db.collection('profiles').document(self.sender).set({
                 'username': handle
             })
+
+            res = user_api.info(handle)
 
             msg = f'{handle} remembered. :D'
 
