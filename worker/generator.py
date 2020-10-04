@@ -34,6 +34,7 @@ class makeRatingChangeMessage:
             if status == 0: return contest_name, msg.format('Predicting ', '+' if delta>=0 else '')
             if status == 2: return 'I think the contest didn\'t start or invalid '
             if status == 4: return 'Noo', '{} didn\'t participate in this contest'.format(self.username)
+            if status == 5: return '{} was not rated'.format(self.username)
         except:
             pass
 
@@ -56,6 +57,9 @@ class makeRatingChangeMessage:
                 for user in is_rating_changed['result']:
                     if user['handle'].lower() == self.username:
                         return (user['oldRating'], user['newRating']-user['oldRating'], 1, user['contestName'])
+
+                
+                return (0,0,4) #Didn't Participate
             else:
                 if 'comment' in is_rating_changed:
                     return (0,0,2)
@@ -64,16 +68,6 @@ class makeRatingChangeMessage:
             print('success ratedList')
             current_ranklist = contest_api.standings(self.contest_id)
             print('success standings')
-
-            participated = False
-            for user in current_ranklist['result']['rows']:
-                handle = user['party']['members'][0]['handle'].lower()
-                if handle == self.username:
-                    participated = True
-                    break
-
-            if not participated:
-                return (0,0,4)
 
             current_rating = {}
 
@@ -112,7 +106,7 @@ class makeRatingChangeMessage:
 
             if self.username in predicted_rating_change:
                 return (current_rating[self.username], predicted_rating_change[self.username],0, contest_name)
-            else: return (0,0,4)
+            else: return (0,0,5)
         except Exception as e:
             print('Rating Change Error', e)
             pass
