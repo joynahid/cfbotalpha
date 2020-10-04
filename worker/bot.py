@@ -25,7 +25,7 @@ HEY = r'hey|hi|hello|oi|hola'
 
 print(re.findall(HEY, 'hello world'))
 
-RATE_CONTESTID_USERNAME = r"rate \d{1,6} [a-z-_0-9]{1,}"
+RATE_CONTESTID_USERNAME = r"rate \d{1,6} [a-z-._0-9]{1,}"
 RATE_CONTESTID = r'rate \d{1,5}'
 RATE = r'rate'
 
