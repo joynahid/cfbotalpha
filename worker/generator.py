@@ -53,11 +53,10 @@ class makeRatingChangeMessage:
             
             is_rating_changed = contest_api.ratingChanges(self.contest_id)
 
-            if is_rating_changed['status'] == 'OK':
+            if is_rating_changed['status'] == 'OK' and is_rating_changed['result']:
                 for user in is_rating_changed['result']:
                     if user['handle'].lower() == self.username:
                         return (user['oldRating'], user['newRating']-user['oldRating'], 1, user['contestName'])
-
                 
                 return (0,0,4) #Didn't Participate
             else:
