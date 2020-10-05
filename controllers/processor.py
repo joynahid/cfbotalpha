@@ -66,8 +66,14 @@ class jobDistributor:
             bot = misc(self.handle, self.sender, db)
             return bot.Remember()
 
+        if self.intent == 'help':
+            bot = misc(self.handle, self.sender, db)
+            return bot.Help()
+
+        return self.error.notSure()['error']
+
 
 class jobErrorHandler:
     def notSure(self):
-        text = 'I\'m not sure what you\'ve sent. Can you write explicitly?', 'It will help me understand'
+        text = 'I\'m not sure what you\'ve sent 🙁. Can you write explicitly?', 'It will help me understand'
         return {'error' : text}
