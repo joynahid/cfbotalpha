@@ -4,42 +4,56 @@ from controllers.codeforces_api import contestApi, userApi
 
 CF_CONTEST_URL = 'https://codeforces.com/api/contest.standings'
 
-class makeRatingChangeMessage:
-    def __init__(self, username, contest_id = None):
-        if contest_id == None:
-            self.get_latest_contestid()
+class ratingChangeControl:
+    def __init__(self, username, contest_id, sender, db):
+        if contest_id == None: self.get_latest_contestid()
         else: self.contest_id = str(contest_id)
 
-        self.username = str(username).lower()
+        if username: self.username = str(username).lower()
+        else: self.get_cf_handle()
+
+        if sender: self.sender = sender
+
+        self.error = ratingChangeError()
+
+        self.db = db
 
         print(self.contest_id, self.username)
 
+    # Message Generator
     def fetch_rating_change_message(self):
         try:
+            if self.username == None:
+                return self.error.usernameNotFound
+
             data = self.generate_rating_change()
 
-            contest_name = None
+            if 'error' in data:
+                return data['error']
 
-            if len(data)>3:
-                contest_name = data[3]
-                data = data[0:3]
+            print(data)
 
-            oldRating, delta, status = data
+            if 'official' in data:
+                oldRating, delta, contest_name = data['official']
+                msg = '{} ' + str(oldRating) + ' to ' + str(oldRating+delta) + ' [{}' + str(delta) + ']'
 
-            contest_url = 'https://codeforces.com/contests/' + self.contest_id
+                build_msg = contest_name, msg.format('Rating changed from', '+' if delta>=0 else '')
 
-            msg = '{} ' + str(oldRating) + ' to ' + str(oldRating+delta) + ' [{}' + str(delta) + ']'
+                return build_msg
 
-            if status == 1: return contest_name, msg.format('Rating changed', '+' if delta>=0 else '')
-            if status == 0: return contest_name, msg.format('Predicting ', '+' if delta>=0 else '')
-            if status == 2: return 'I think the contest didn\'t start or invalid '
-            if status == 4: return 'Noo', '{} didn\'t participate in this contest'.format(self.username)
-            if status == 5: return '{} was not rated'.format(self.username)
+            if 'prediction' in data:
+                oldRating, delta, contest_name = data['official']
+                msg = '{} ' + str(oldRating) + ' to ' + str(oldRating+delta) + ' [{}' + str(delta) + ']'
+                
+                build_msg = contest_name, msg.format('Predicting', '+' if delta>=0 else '')
+
+                return build_msg
         except:
             pass
 
         return None
 
+    # Last Contest if Contest ID was not given
     def get_latest_contestid(self):
         lis = contestApi.list()
         for i in lis['result']:
@@ -47,6 +61,14 @@ class makeRatingChangeMessage:
                 self.contest_id = str(i['id'])
                 break
     
+    # Get CF Handle if not given
+    def get_cf_handle(self):
+        try:
+            self.username = self.db.collection('profiles').document(self.sender).get().to_dict()['username']
+        except:
+            self.username = None
+    
+    # Generate Rating Change
     def generate_rating_change(self):
         try:
             past = time.time()
@@ -56,12 +78,13 @@ class makeRatingChangeMessage:
             if is_rating_changed['status'] == 'OK' and is_rating_changed['result']:
                 for user in is_rating_changed['result']:
                     if user['handle'].lower() == self.username:
-                        return (user['oldRating'], user['newRating']-user['oldRating'], 1, user['contestName'])
+                        res = {'official' : (user['oldRating'], user['newRating']-user['oldRating'], user['contestName'])}
+                        return res
                 
-                return (0,0,4) #Didn't Participate
+                return self.error.userNotRated(self.username) #Didn't Participate or rated
             else:
                 if 'comment' in is_rating_changed and 'finished yet' not in is_rating_changed['comment']:
-                    return (0,0,2)
+                    return  self.error.invalidContestID() # Invalid Contest
 
             rated_userlist = userApi.ratedList(self.contest_id)
             print('success ratedList')
@@ -104,12 +127,13 @@ class makeRatingChangeMessage:
             contest_name = current_ranklist['result']['contest']['name']
 
             if self.username in predicted_rating_change:
-                return (current_rating[self.username], predicted_rating_change[self.username],0, contest_name)
-            else: return (0,0,5)
+                res = {'prediction' : (current_rating[self.username], predicted_rating_change[self.username], contest_name)}
+                return res
+
+            else: return self.error.userNameNotFound(self.username) # Not rated or didn't participate
+
         except Exception as e:
             print('Rating Change Error', e)
-            pass
-        finally:
             pass
 
         return None
@@ -117,3 +141,16 @@ class makeRatingChangeMessage:
 # rating = makeRatingChangeMessage(1408, 'joynahiid')
 
 # print(rating.fetch_rating_change())
+
+class ratingChangeError:
+    def usernameNotFound(self):
+        text = {'error' : ('Codeforces Handle was not found.', 'Please send \'Remember <YOURCFHANDLE>\' to perform this query')}
+        return text
+
+    def invalidContestID(self):
+        text = {'error' : 'Invalid Contest ID. Please send contest ID from the contest URL/ Link'}
+        return text
+    
+    def userNotRated(self, username):
+        text = {'error' : '{} was not rated or didn\'t participate'.format(username)}
+        return text

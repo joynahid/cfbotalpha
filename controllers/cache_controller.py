@@ -20,7 +20,7 @@ class cacheHandler:
             with open(BASE_LOCATION + filename, 'r', encoding='utf-8') as cache:
                 return json.loads(cache.read())
         except Exception as e:
-            print('retrieveError', e, type)
+            pass
         
         return None
 

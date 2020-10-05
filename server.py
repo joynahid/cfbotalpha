@@ -15,25 +15,29 @@ def index():
 def webhook():
     if request.method == 'GET' and request.args.get('hub.verify_token') == os.environ['VERIFY_TOKEN']:
         return request.args.get('hub.challenge')
+
     elif request.method == 'GET':
         return redirect(url_for('index'))
 
     data = request.get_json()
 
     try:
-        message = data['entry'][0]['messaging'][0]['message']['text']
+        nlp = data['entry'][0]['messaging'][0]['message']['nlp']
         sender = data['entry'][0]['messaging'][0]['sender']['id']
 
-        bot = jobDistributor(message,sender)
+        bot = jobDistributor(nlp,sender)
 
-        made_msg = bot.find_and_execute_command()
+        made_msg = bot.distribute()
+
+        print(made_msg)
 
         if 'tuple' in str(type(made_msg)):
             for msg in made_msg:
                 if msg: facebook.send_message(msg,sender)
         else: facebook.send_message(made_msg, sender)
 
-    except:
+    except Exception as e:
+        print(e)
         facebook.send_message('Sorry! Something went wrong', sender)
         pass
 
@@ -42,4 +46,4 @@ def webhook():
 # print(fetch_rating_change('1266','hwyyou'))
 
 if __name__ == "__main__":
-    app.run(debug=False, threaded=True, port=80)
+    app.run(debug=True, threaded=True, port=80)
