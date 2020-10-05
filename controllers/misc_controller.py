@@ -13,9 +13,7 @@ class misc:
         'if you write \'rate tourist\', it will show what tourist did in the last contest',
         'So now you know, \'Rate <cfhandle>\' will reply you with last contest rating change')
 
-        help_text = help_text.strip()
-        msg = help_text
-        return msg, 'Now, remember yourself first to make life easier :D'
+        return help_text, 'Now, remember yourself first to make life easier :D'
 
     def Remember(self):  # Remember Handle
 
