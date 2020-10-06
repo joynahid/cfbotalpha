@@ -1,4 +1,4 @@
 .env
 Pipfile
 Pipfile.lock
-bot_env
+.bot_env
