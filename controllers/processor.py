@@ -6,6 +6,7 @@ from controllers.misc_controller import misc
 import firebase_admin
 from firebase_admin import credentials, firestore
 
+
 cred = credentials.Certificate({
     "type": "service_account",
     "project_id": os.environ['FIREBASE_PROJECT_ID'],
@@ -33,11 +34,9 @@ class jobDistributor:
         self.sender = str(sender)
         self.error = jobErrorHandler()
 
-        print('Bot Initialized')
-
     def setValue(self, key, confidence):
-        # print('Setting', key)
-        if key in self.wit['entities']:
+        # print('Setting', key, self.wit)
+        if 'entities' in self.wit and key in self.wit['entities']:
             data = self.wit['entities'][key][0]
 
             if data['confidence'] > confidence:
@@ -46,31 +45,43 @@ class jobDistributor:
         return self.error.notSure()
 
     def distribute(self):
-        cf_handle_data = self.setValue('cf_handle:cf_handle', 0.8)
+        try:
+            cf_handle_data = self.setValue('cf_handle:cf_handle', 0.8)
 
-        if 'error' not in cf_handle_data:
-            self.handle = cf_handle_data
-        
-        contest_id = self.setValue('contest_id:contest_id', 0.8)
+            if 'error' not in cf_handle_data:
+                self.handle = cf_handle_data
+            
+            contest_id = self.setValue('contest_id:contest_id', 0.8)
 
-        if 'error' not in contest_id:
-            self.contest_id = contest_id
+            if 'error' not in contest_id:
+                self.contest_id = contest_id
 
-        print(self.intent)
+            print('INTENTION', self.intent, self.handle, self.contest_id)
 
-        if self.intent == 'rating_change':
-            bot = ratingChangeControl(self.handle, self.contest_id, self.sender, db)
-            return bot.fetch_rating_change_message()
+            if self.intent == 'rating_change':
+                bot = ratingChangeControl(self.handle, self.contest_id, self.sender, db)
+                return bot.fetch_rating_change_message()
 
-        if self.intent == 'remember':
-            bot = misc(self.handle, self.sender, db)
-            return bot.Remember()
+            if self.intent == 'remember':
+                if not self.handle: return 'Looks like you didn\'t provide your codeforces handle', 'Send me, Remember yourcfhandle'
+                bot = misc(self.handle, self.sender, db)
+                return bot.remember()
 
-        if self.intent == 'help':
-            bot = misc(self.handle, self.sender, db)
-            return bot.Help()
+            if self.intent == 'help':
+                bot = misc(self.handle, self.sender, db)
+                return bot.help()
 
-        return self.error.notSure()['error']
+            if self.intent == 'whoami':
+                bot = misc(self.handle, self.sender, db)
+                return bot.whoAmI()
+
+            if self.intent == 'upcoming_contests':
+                bot = misc(self.handle, self.sender, db)
+                return bot.upcomingContest()
+
+            return self.error.notSure()['error']
+        except Exception as e:
+            print('Bot error', e)
 
 
 class jobErrorHandler:

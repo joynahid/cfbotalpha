@@ -1,35 +1,37 @@
 import requests, time
 from controllers.rating_calculator import CodeforcesRatingCalculator
-from controllers.codeforces_api import contestApi, userApi
+from controllers.api_requests import contestApi, userApi
 
 CF_CONTEST_URL = 'https://codeforces.com/api/contest.standings'
 
 class ratingChangeControl:
     def __init__(self, username, contest_id, sender, db):
+        self.db = db
+
         if contest_id == None: self.get_latest_contestid()
         else: self.contest_id = str(contest_id)
-
-        if username: self.username = str(username).lower()
-        else: self.get_cf_handle()
 
         if sender: self.sender = sender
 
         self.error = ratingChangeError()
 
-        self.db = db
+        if username: self.username = str(username).lower()
+        else: self.get_cf_handle()
 
         print(self.contest_id, self.username)
 
     # Message Generator
     def fetch_rating_change_message(self):
         try:
+            if self.contest_id == None:
+                return 'Couldn\'t fetch last rated contest. Codeforces didn\'t respond :/'
+
             if self.username == None:
-                return self.error.usernameNotFound
+                return self.error.usernameNotFound()['error']
 
             data = self.generate_rating_change()
 
-            if 'error' in data:
-                return data['error']
+            if 'error' in data: return data['error']
 
             print(data)
 
@@ -48,24 +50,33 @@ class ratingChangeControl:
                 build_msg = contest_name, msg.format('Predicting', '+' if delta>=0 else '')
 
                 return build_msg
-        except:
+        except Exception as e:
+            print('Rating Change Controller ', e)
             pass
 
         return None
 
     # Last Contest if Contest ID was not given
     def get_latest_contestid(self):
-        lis = contestApi.list()
-        for i in lis['result']:
-            if i['phase'] != 'BEFORE':
-                self.contest_id = str(i['id'])
-                break
+        try:
+            lis = contestApi.list()
+            for i in lis['result']:
+                if i['phase'] != 'BEFORE' and 'unrated' not in i['name'].lower():
+                    self.contest_id = str(i['id'])
+                    break
+                
+        except Exception as e:
+            self.contest_id = None
+            print("Couldn't fecth contest", e)
+
     
     # Get CF Handle if not given
     def get_cf_handle(self):
         try:
+            print(self.db)
             self.username = self.db.collection('profiles').document(self.sender).get().to_dict()['username']
-        except:
+        except Exception as e:
+            print('Database error',e)
             self.username = None
     
     # Generate Rating Change
@@ -86,7 +97,7 @@ class ratingChangeControl:
                 if 'comment' in is_rating_changed and 'finished yet' not in is_rating_changed['comment']:
                     return  self.error.invalidContestID() # Invalid Contest
 
-            rated_userlist = userApi.ratedList(self.contest_id)
+            rated_userlist = userApi.ratedList(self.contest_id,'true', self.sender)
             print('success ratedList')
             current_ranklist = contestApi.standings(self.contest_id)
             print('success standings')
@@ -130,7 +141,7 @@ class ratingChangeControl:
                 res = {'prediction' : (current_rating[self.username], predicted_rating_change[self.username], contest_name)}
                 return res
 
-            else: return self.error.userNameNotFound(self.username) # Not rated or didn't participate
+            else: return self.error.userNotRated(self.username) # Not rated or didn't participate
 
         except Exception as e:
             print('Rating Change Error', e)
