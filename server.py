@@ -2,10 +2,6 @@ import requests,os
 from flask import Flask, request, render_template, redirect, url_for
 from controllers.processor import jobDistributor
 from controllers.facebook_api import facebook
-from dotenv import load_dotenv
-
-project_folder = os.path.expanduser('~/cfbotalpha')
-load_dotenv(os.path.join(project_folder, '.env'))
 
 app = Flask(__name__)
 
