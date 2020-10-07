@@ -2,6 +2,9 @@ import requests,os
 from flask import Flask, request, render_template, redirect, url_for
 from controllers.processor import jobDistributor
 from controllers.facebook_api import facebook
+from wit import Wit
+
+wit = Wit(os.environ['WIT_CLIENT_TOKEN'])
 
 app = Flask(__name__)
 
@@ -36,6 +39,11 @@ def webhook():
 
         nlp = data['entry'][0]['messaging'][0]['message']['nlp']
         sender = data['entry'][0]['messaging'][0]['sender']['id']
+        msg = data['entry'][0]['messaging'][0]['message']['text']
+
+        if 'errors' in nlp:
+            nlp = wit.message(msg)
+            # print(nlp)
 
         bot = jobDistributor(nlp,sender)
 
@@ -44,6 +52,7 @@ def webhook():
         if 'tuple' in str(type(made_msg)):
             for msg in made_msg:
                 if msg: facebook.send_message(msg,sender)
+
         elif 'list' in str(type(made_msg)):
             facebook.send_list_item(made_msg,sender)
         else: facebook.send_message(made_msg, sender)

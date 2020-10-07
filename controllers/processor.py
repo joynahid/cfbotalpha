@@ -6,7 +6,6 @@ from controllers.misc_controller import misc
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-
 cred = credentials.Certificate({
     "type": "service_account",
     "project_id": os.environ['FIREBASE_PROJECT_ID'],

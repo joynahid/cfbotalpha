@@ -21,7 +21,8 @@ class misc:
 
         print(self.handle, self.sender)
 
-        verify_res = userApi.info(self.handle)
+        try: verify_res = userApi.info(self.handle)
+        except: return 'Codeforces didn\'t respond well. Please try again later'
 
         if verify_res['status'] == 'FAILED':
             return '{} not found'.format(self.handle)
@@ -87,12 +88,13 @@ class misc:
                 readable_message.append({
                     'title': each['name'],
                     'subtitle': 'Starts ' + each['start'],
-                    'default_action': {
-                        'type' : 'web_url',
-                        'url' : each['href'],
-                        'webview_height_ratio' : 'tall',
-                        'messenger_extensions' : True if 'codeforces' in each['href'] else False
-                    }
+                    'buttons': [
+                        {
+                            'type' : 'web_url',
+                            'title': 'Go to Contest',
+                            'url' : each['href']
+                        }
+                    ]
                 })
 
             return readable_message
@@ -101,5 +103,6 @@ class misc:
             print("upcoming contest error", e)
 
         return 'Found'
+
 
 

@@ -8,50 +8,65 @@
     <title>CFBOT Help</title>
 
     <style>
+        body{
+          font-family: 'Ubuntu Mono', serif;
+        }
+
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #fcfcfc;
+            background-color: #f1f1f1;
         }
     </style>
 </head>
 
 <body>
     <div class="container" style="font-size: 15px;">
-        <table class="table table-striped table-sm">
+        <h4 class="mt-4">CFBot Help</h4>
+        <h6>You can send message in any format. The bot will automatically guess what you want to know. 😉</h6>
+        <hr>
+        <table class="table table-borderless table-sm">
             <thead>
               <tr>
                 <th scope="col">Text</th>
                 <th scope="col">Purpose</th>
-                <th scope="col">Exmaple(s)</th>
               </tr>
             </thead>
 
             <tbody>
               <tr>
                 <th scope="row">Rate CONTEST_ID CF_HANDLE </th>
-                <td>Shows OFFICIAL or PREDICTED rating change CF_HANDLE of contest CONTEST_ID</td>
-                <td>rating 1399 joynahiid, rate tahsin_protik 1400, etc.</td>
+                <td>Shows OFFICIAL or PREDICTED rating change of CF_HANDLE in contest CONTEST_ID</td>
               </tr>
+
               <tr>
                 <th scope="row">Rate CF_HANDLE </th>
-                <td>Shows OFFICIAL or PREDICTED rating change of CF_HANDLE of LAST RATED Codeforces contest</td>
-                <td>Rating joynahiid, rate tourist, etc.</td>
+                <td>Shows OFFICIAL or PREDICTED rating change of CF_HANDLE of <b>LAST RATED</b> Codeforces Contest</td>
               </tr>
+
+              <tr>
+                <th scope="row">Rate CONTEST_ID </th>
+                <td>Shows OFFICIAL or PREDICTED rating change of REMEMBERED_CF_HANDLE in contest CONTEST_ID</td>
+              </tr>
+
+              <tr>
+                <th scope="row">Rate</th>
+                <td>Shows OFFICIAL or PREDICTED rating change of REMEMBERED_CF_HANDLE of <b>LAST RATED</b> Codeforces Contest</td>
+              </tr>
+
               <tr>
                 <th scope="row">Remember CF_HANDLE</th>
-                <td>Remembers your CF_HANDLE for quick query</td>
-                <td>remember tourist</td>
+                <td>Remembers your CF_HANDLE for performing handleless queries</td>
               </tr>
+
               <tr>
                 <th scope="row">Who am I?</th>
                 <td>Replies with your remembered handle</td>
-                <td>whoami</td>
               </tr>
 
               <tr>
                 <th scope="row">Upcoming Contests</th>
                 <td>Shows future contests</td>
-                <td>upcoming, Upcoming contests, etc.</td>
               </tr>
+
             </tbody>
           </table>
     </div>
