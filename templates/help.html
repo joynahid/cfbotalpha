@@ -2,74 +2,75 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>CFBOT Help</title>
-
-    <style>
-        body{
-          font-family: 'Ubuntu Mono', serif;
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f1f1f1;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/styles.css" />
+  <title>CFBOT Help</title>
 </head>
 
 <body>
-    <div class="container" style="font-size: 15px;">
-        <h4 class="mt-4">CFBot Help</h4>
-        <h6>You can send message in any format. The bot will automatically guess what you want to know. 😉</h6>
-        <hr>
-        <table class="table table-borderless table-sm">
-            <thead>
-              <tr>
-                <th scope="col">Text</th>
-                <th scope="col">Purpose</th>
-              </tr>
-            </thead>
+  <div class="container" style="font-size: 15px;">
+    <h4 class="mt-4">CFBot Help</h4>
+    <h6>You can send message in any format. The bot will automatically guess what you want to know. 😉</h6>
+    <hr>
+    <table class="table table-borderless table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Text</th>
+          <th scope="col">Purpose</th>
+        </tr>
+      </thead>
 
-            <tbody>
-              <tr>
-                <th scope="row">Rate CONTEST_ID CF_HANDLE </th>
-                <td>Shows OFFICIAL or PREDICTED rating change of CF_HANDLE in contest CONTEST_ID</td>
-              </tr>
+      <tbody>
+        <tr>
+          <th scope="row">Rate CONTEST_ID CF_HANDLE </th>
+          <td>Shows OFFICIAL or PREDICTED rating change of CF_HANDLE in contest CONTEST_ID</td>
+        </tr>
 
-              <tr>
-                <th scope="row">Rate CF_HANDLE </th>
-                <td>Shows OFFICIAL or PREDICTED rating change of CF_HANDLE of <b>LAST RATED</b> Codeforces Contest</td>
-              </tr>
+        <tr>
+          <th scope="row">Rate CF_HANDLE </th>
+          <td>Shows OFFICIAL or PREDICTED rating change of CF_HANDLE of <b>LAST RATED</b> Codeforces Contest</td>
+        </tr>
 
-              <tr>
-                <th scope="row">Rate CONTEST_ID </th>
-                <td>Shows OFFICIAL or PREDICTED rating change of REMEMBERED_CF_HANDLE in contest CONTEST_ID</td>
-              </tr>
+        <tr>
+          <th scope="row">Rate CONTEST_ID </th>
+          <td>Shows OFFICIAL or PREDICTED rating change of REMEMBERED_CF_HANDLE in contest CONTEST_ID</td>
+        </tr>
 
-              <tr>
-                <th scope="row">Rate</th>
-                <td>Shows OFFICIAL or PREDICTED rating change of REMEMBERED_CF_HANDLE of <b>LAST RATED</b> Codeforces Contest</td>
-              </tr>
+        <tr>
+          <th scope="row">Rate</th>
+          <td>Shows OFFICIAL or PREDICTED rating change of REMEMBERED_CF_HANDLE of <b>LAST RATED</b> Codeforces Contest
+          </td>
+        </tr>
 
-              <tr>
-                <th scope="row">Remember CF_HANDLE</th>
-                <td>Remembers your CF_HANDLE for performing handleless queries</td>
-              </tr>
+        <tr>
+          <th scope="row">Remember CF_HANDLE</th>
+          <td>Remembers your CF_HANDLE for performing handleless queries</td>
+        </tr>
 
-              <tr>
-                <th scope="row">Who am I?</th>
-                <td>Replies with your remembered handle</td>
-              </tr>
+        <tr>
+          <th scope="row">Who am I?</th>
+          <td>Replies with your remembered handle</td>
+        </tr>
 
-              <tr>
-                <th scope="row">Upcoming Contests</th>
-                <td>Shows future contests</td>
-              </tr>
+        <tr>
+          <th scope="row">Upcoming Contests</th>
+          <td>Shows future contests</td>
+        </tr>
 
-            </tbody>
-          </table>
-    </div>
+      </tbody>
+    </table>
+
+    <h4 class="mt-4">Terms & Conditions</h4>
+    <p>This bot is open for all. Anyone can use it for their personal usage.</p>
+    <p>This bot will store nothing but your Codeforces handle if you only perform the "Remember" query. Otherwise it
+      won't store anything.</p>
+    <p>The bot uses Codeforces API, CLIST API and WIT API behind to serve you.</p>
+    <p>This is a open source project. Check out the source code in <a
+        href="https://github.com/joynahid/cfbotalpha">Github</a></p>
+  </div>
 </body>
 
 </html>

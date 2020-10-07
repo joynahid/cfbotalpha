@@ -4,31 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/styles.css" />
     <title>CFBOT</title>
-
-    <style>
-        body{
-            font-family: 'Ubuntu Mono', sans-serif;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container">
         <h1 class="mt-5">Welcome to CFBot Alpha</h1>
-        <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fcfbotalpha.herokuapp.com" alt="Hits">
+        <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fcfbotalpha.herokuapp.com"
+            alt="Hits">
 
         <hr>
 
         <p class="pt-2">
-            This is a bot for <b>codeforces</b>. Initially you can perform some useful queries in this bot. It will help you know the rating changes both <b>predicted</b> official based on the phase of a contest. This bot can also remember yourself if
-            you let it to do so and perform handleless queries to make your life easier. I'll add more features real soon. So now get to the bot and perform some queries. Thanks.
+            This is a bot for <b>codeforces</b>. Initially you can perform some useful queries in this bot. It will help
+            you know the rating changes both <b>predicted</b> official based on the phase of a contest. This bot can
+            also remember yourself if
+            you let it to do so and perform handleless queries to make your life easier. I'll add more features real
+            soon. So now get to the bot and perform some queries. Thanks.
         </p>
 
         <h3 class="pt-3">What can this bot do currently?</h3>
         <ul class="list-group">
-            <li class="list-group-item">✓ Shows Contest and Handle wise rating changes both official and predicted based on the phase of that contest</li>
+            <li class="list-group-item">✓ Shows Contest and Handle wise rating changes both official and predicted based
+                on the phase of that contest</li>
             <li class="list-group-item">✓ Can remember Handle and perform queries based on that handle</li>
             <li class="list-group-item">✓ Shows upcoming contest</li>
         </ul>
@@ -41,20 +42,20 @@
         </ul>
 
         <h3 class="pt-2">How to contribute?</h3>
-        <p>Please make a pull request on github and contribute.</p>
+        <p>Please make a pull request on <a href="https://github.com/joynahid/cfbotalpha">Github</a> and contribute.</p>
     </div>
 
     <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>
     <script>
-        window.fbAsyncInit = function() {
+        window.fbAsyncInit = function () {
             FB.init({
                 xfbml: true,
                 version: 'v8.0'
             });
         };
 
-        (function(d, s, id) {
+        (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) return;
             js = d.createElement(s);
@@ -65,15 +66,20 @@
     </script>
 
     <!-- Your Chat Plugin code -->
-    <div class="fb-customerchat" attribution=setup_tool page_id="100224985192860" theme_color="#44bec7" logged_in_greeting="Send me a Hi to get started with the bot" logged_out_greeting="Thanks. Hope you will get back soon :D">
+    <div class="fb-customerchat" attribution=setup_tool page_id="100224985192860" theme_color="#44bec7"
+        logged_in_greeting="Send me a Hi to get started with the bot"
+        logged_out_greeting="Thanks. Hope you will get back soon :D">
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+        </script>
 </body>
 
 </html>
