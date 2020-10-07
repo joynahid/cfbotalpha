@@ -12,3 +12,4 @@ urllib3==1.25.10
 Werkzeug==1.0.1
 gunicorn
 firebase-admin
+wit
