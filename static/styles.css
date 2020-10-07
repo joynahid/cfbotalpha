@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap');
+
+body{
+    font-family: 'Ubuntu', sans-serif;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #f1f1f1;
+  }
