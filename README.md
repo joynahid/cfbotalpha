@@ -10,32 +10,36 @@ The bot server is powered by flask framework and hosted on heroku. [Click Here](
 ## Bot's Artifical Intelligence
 CFBot uses Wit's NLP. It's well trained to recognize your message. But still don't trust a bot. Send message in correct format without any unnecessary information to get 100% correct reply.
 
-## Tree
-📦cfbotalpha
- ┣ 📂cache
- ┃ ┗ 📜.gitkeep
- ┣ 📂controllers
- ┃ ┣ 📜api_requests.py
- ┃ ┣ 📜cache_controller.py
- ┃ ┣ 📜facebook_api.py
- ┃ ┣ 📜misc_controller.py
- ┃ ┣ 📜processor.py
- ┃ ┣ 📜rating_calculator.py
- ┃ ┗ 📜rating_change_controller.py
- ┣ 📂static
- ┃ ┗ 📜styles.css
- ┣ 📂templates
- ┃ ┣ 📜help.html
- ┃ ┗ 📜index.html
- ┣ 📜.env
- ┣ 📜.flaskenv
- ┣ 📜.gitignore
- ┣ 📜Procfile
- ┣ 📜README.md
- ┣ 📜requirements.txt
- ┣ 📜runtime.txt
- ┣ 📜server.py
- ┗ 📜test.py
+## Tree Structure
+```
+|-- cache
+|   `-- .gitkeep
+|-- controllers
+|   |-- api_requests.py
+|   |-- cache_controller.py
+|   |-- facebook_api.py
+|   |-- misc_controller.py
+|   |-- processor.py
+|   |-- rating_calculator.py
+|   `-- rating_change_controller.py
+|-- static
+|   `-- styles.css
+|-- templates
+|   |-- help.html
+|   `-- index.html
+|-- .env
+|-- .flaskenv
+|-- .gitignore
+|-- Procfile
+|-- README.md
+|-- requirements.txt
+|-- runtime.txt
+|-- server.py
+`-- test.py
+
+4 directories, 20 files
+
+```
 
  ## Installation
 
