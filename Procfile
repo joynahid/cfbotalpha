@@ -1,1 +1,1 @@
-web: hypercorn 0.0.0.0:$PORT server:app
+web: hypercorn --bind 0.0.0.0:$PORT server:app
