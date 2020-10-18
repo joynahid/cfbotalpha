@@ -1,1 +1,1 @@
-web: gunicorn server:app
+web: hypercorn 0.0.0.0:$PORT server:app

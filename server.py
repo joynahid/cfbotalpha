@@ -1,40 +1,36 @@
 import requests
-import os
-from flask import Flask, request, render_template, redirect, url_for
+import os, asyncio
+from quart import Quart, request, render_template, redirect, url_for
 from controllers.processor import jobDistributor
 from controllers.facebook_api import facebook
 from wit import Wit
 
 wit = Wit(os.environ['WIT_CLIENT_TOKEN'])
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 TOKEN = os.environ['TOKEN']
 VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
 
-
 @app.route('/')
-def index():
-    return render_template('index.html')
-
+async def index():
+    return await render_template('index.html')
 
 @app.route('/help')
-def help():
-    return render_template('help.html')
-
+async def help():
+    return await render_template('help.html')
 
 @app.route('/webhook', methods=['GET', 'POST'])
-def webhook():
+async def webhook():
     if request.method == 'GET' and request.args.get('hub.verify_token') == os.environ['VERIFY_TOKEN']:
         return request.args.get('hub.challenge')
 
     elif request.method == 'GET':
         return redirect(url_for('index'))
 
-    data = request.get_json()
+    data = await request.get_json()
 
     try:
-
         if 'postback' in data['entry'][0]['messaging'][0]:
             if 'Get Started' in data['entry'][0]['messaging'][0]['postback']['title']:
                 text = 'Hi! Hope you\'re doing good! Click the text "How to use this bot?" to get started. Hope you will have fun ;)'
@@ -52,7 +48,7 @@ def webhook():
 
         bot = jobDistributor(nlp, sender)
 
-        made_msg = bot.distribute()
+        made_msg = await asyncio.create_task(bot.distribute())
 
         if 'tuple' in str(type(made_msg)):
             for msg in made_msg:
@@ -69,7 +65,3 @@ def webhook():
         pass
 
     return 'ok', 200
-
-
-if __name__ == "__main__":
-    app.run(debug=True, threaded=True, port=80)

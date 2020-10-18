@@ -4,9 +4,7 @@ TOKEN = os.environ['TOKEN']
 
 class facebookApi:
     def send(self, request_body):
-        print(request_body)
         resp = requests.post('https://graph.facebook.com/v5.0/me/messages?access_token='+TOKEN, json=request_body, headers = {'Content-type': 'application/json'})
-        print(resp.text)
 
     def send_message(self, msg=None,recipient_id=None):
         try:

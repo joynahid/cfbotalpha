@@ -1,6 +1,7 @@
 import re
 import os
 import random
+import asyncio
 from controllers.rating_change_controller import ratingChangeControl
 from controllers.misc_controller import misc
 import firebase_admin
@@ -24,7 +25,9 @@ db = firestore.client()
 
 class jobDistributor:
     def __init__(self, wit, sender=None):
-        try: self.intent = wit['intents'][0]['name']
+        try:
+            if wit['intents'][0]['confidence']>=0.8:
+                self.intent = wit['intents'][0]['name']
         except: self.intent = None
         
         self.wit = wit
@@ -43,8 +46,12 @@ class jobDistributor:
 
         return self.error.notSure()
 
-    def distribute(self):
+    async def distribute(self):
         try:
+            if not self.intent:
+                bot = misc(self.handle, self.sender, db)
+                return bot.ability()
+
             cf_handle_data = self.setValue('cf_handle:cf_handle', 0.8)
 
             if 'error' not in cf_handle_data:
@@ -59,7 +66,7 @@ class jobDistributor:
 
             if self.intent == 'rating_change':
                 bot = ratingChangeControl(self.handle, self.contest_id, self.sender, db)
-                return bot.fetch_rating_change_message()
+                return await asyncio.create_task(bot.fetch_rating_change_message())
 
             if self.intent == 'remember':
                 if not self.handle: return 'Looks like you didn\'t provide your codeforces handle', 'Send me, Remember yourcfhandle'
@@ -78,10 +85,8 @@ class jobDistributor:
                 bot = misc(self.handle, self.sender, db)
                 return bot.upcomingContest()
 
-            return self.error.notSure()['error']
         except Exception as e:
             print('Bot error', e)
-
 
 class jobErrorHandler:
     def notSure(self):
