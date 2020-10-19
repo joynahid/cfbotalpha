@@ -27,10 +27,12 @@ db = firestore.client()
 
 class jobDistributor:
     def __init__(self, wit, sender=None):
+        
+        self.intent = None
+
         try:
             if wit['intents'][0]['confidence']>=0.8:
                 self.intent = wit['intents'][0]['name']
-        except: self.intent = None
         
         self.wit = wit
         self.contest_id = None
