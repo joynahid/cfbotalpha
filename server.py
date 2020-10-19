@@ -1,8 +1,8 @@
 import requests
-import os, asyncio
+import os
+import asyncio
 from quart import Quart, request, render_template, redirect, url_for
 from controllers.processor import jobDistributor
-from controllers.facebook_api import facebook
 from wit import Wit
 
 wit = Wit(os.environ['WIT_CLIENT_TOKEN'])
@@ -12,13 +12,16 @@ app = Quart(__name__)
 TOKEN = os.environ['TOKEN']
 VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
 
+
 @app.route('/')
 async def index():
     return await render_template('index.html')
 
+
 @app.route('/help')
 async def help():
     return await render_template('help.html')
+
 
 @app.route('/webhook', methods=['GET', 'POST'])
 async def webhook():
@@ -47,18 +50,7 @@ async def webhook():
             # print(nlp)
 
         bot = jobDistributor(nlp, sender)
-
-        made_msg = await asyncio.create_task(bot.distribute())
-
-        if 'tuple' in str(type(made_msg)):
-            for msg in made_msg:
-                if msg:
-                    facebook.send_message(msg, sender)
-
-        elif 'list' in str(type(made_msg)):
-            facebook.send_list_item(made_msg, sender)
-        else:
-            facebook.send_message(made_msg, sender)
+        asyncio.create_task(bot.reply())
 
     except Exception as e:
         print('Error at server', e)

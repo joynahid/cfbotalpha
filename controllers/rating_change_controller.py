@@ -18,8 +18,6 @@ class ratingChangeControl:
         if username: self.username = str(username).lower()
         else: self.get_cf_handle()
 
-        print(self.contest_id, self.username)
-
     # Message Generator
     async def fetch_rating_change_message(self):
         try:
@@ -27,6 +25,8 @@ class ratingChangeControl:
                 await self.save_state
                 if self.contest_id == None:
                     return 'Couldn\'t fetch last rated contest. Codeforces didn\'t respond :/'
+
+            print(self.contest_id, self.username)
 
             if self.username == None:
                 return self.error.usernameNotFound()['error']
@@ -84,26 +84,25 @@ class ratingChangeControl:
     # Generate Rating Change
     async def generate_rating_change(self):
         try:
-            past = time.time()
             
-            # rating_change_url = contest_api.ratingChanges(self.contest_id)
+            rating_change_url = contest_api.ratingChanges(self.contest_id)
 
-            # async_request.clear_urls()
-            # async_request.add_url(rating_change_url)
+            async_request.clear_urls()
+            async_request.add_url(rating_change_url)
 
-            # rating_changed = await asyncio.create_task(async_request.call())
-            # rating_changed = rating_changed[0]
+            rating_changed = await asyncio.create_task(async_request.call())
+            rating_changed = rating_changed[0]
 
-            # if rating_changed['status'] == 'OK' and rating_changed['result']:
-            #     for user in rating_changed['result']:
-            #         if user['handle'].lower() == self.username:
-            #             res = {'official' : (user['oldRating'], user['newRating']-user['oldRating'], user['contestName'])}
-            #             return res
+            if rating_changed['status'] == 'OK' and rating_changed['result']:
+                for user in rating_changed['result']:
+                    if user['handle'].lower() == self.username:
+                        res = {'official' : (user['oldRating'], user['newRating']-user['oldRating'], user['contestName'])}
+                        return res
                 
-            #     return self.error.userNotRated(self.username) #Didn't Participate or rated
-            # else:
-            #     if 'comment' in rating_changed and 'finished yet' not in rating_changed['comment']:
-            #         return  self.error.invalidContestID() # Invalid Contest
+                return self.error.userNotRated(self.username) #Didn't Participate or rated
+            else:
+                if 'comment' in rating_changed and 'finished yet' not in rating_changed['comment']:
+                    return  self.error.invalidContestID() # Invalid Contest
 
             rated_userlist_url = user_api.ratedList(self.contest_id,'true')
             current_ranklist_url = contest_api.standings(self.contest_id)
@@ -120,9 +119,6 @@ class ratingChangeControl:
                 current_rating[user['handle'].lower()] = user['rating']
 
             data = []
-
-            print(rated_userlist['status'])
-            print(current_ranklist['status'])
 
             for user in current_ranklist['result']['rows']:
                 handle = user['party']['members'][0]['handle'].lower()
@@ -142,10 +138,6 @@ class ratingChangeControl:
             calculate = CodeforcesRatingCalculator(data)
 
             predicted_rating_change = calculate.calculate_rating_changes()
-
-            future = time.time()
-
-            print('Executed in', future-past, 'seconds')
 
             contest_name = current_ranklist['result']['contest']['name']
 

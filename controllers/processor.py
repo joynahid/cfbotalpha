@@ -2,10 +2,12 @@ import re
 import os
 import random
 import asyncio
+import time
 from controllers.rating_change_controller import ratingChangeControl
 from controllers.misc_controller import misc
 import firebase_admin
 from firebase_admin import credentials, firestore
+from controllers.facebook_api import facebook
 
 cred = credentials.Certificate({
     "type": "service_account",
@@ -45,6 +47,22 @@ class jobDistributor:
                 return data['value']
 
         return self.error.notSure()
+
+    async def reply(self):
+        past = time.time()
+        made_msg = await asyncio.create_task(self.distribute())
+        if 'tuple' in str(type(made_msg)):
+            for msg in made_msg:
+                if msg:
+                    facebook.send_message(msg, self.sender)
+
+        elif 'list' in str(type(made_msg)):
+            facebook.send_list_item(made_msg, self.sender)
+        else:
+            facebook.send_message(made_msg, self.sender)
+
+        future = time.time()
+        print('Executed in', future-past, 'seconds')
 
     async def distribute(self):
         try:
