@@ -3,12 +3,12 @@
 This a Facebook Messenger Bot for competitive programming enthusiasts. It can show rating changes real time based on contest phase and codeforces handle with Wit's AI power. It uses Wit's NLP (Natural Language Processing) to process your message and automatically detect what you want to know. Cool, right?
 
 ### Bot's Server
-The bot server is powered by flask framework and hosted on heroku. [Click Here](https://cfbotalpha.herokuapp.com/) to go to the website
+The bot server is powered by ~Flask~ Quart framework and hosted on heroku. [Click Here](https://cfbotalpha.herokuapp.com/) to go to the website
 
 <!-- ## Sample Conversation -->
 
 ## Bot's Artifical Intelligence
-CFBot uses Wit's NLP. It's well trained to recognize your message. But still don't trust a bot. Send message in correct format without any unnecessary information to get 100% correct reply.
+CFBot uses Wit's NLP. It's well trained to recognize your message. Send message in correct format without any unnecessary information to get 100% correct reply.
 
 ## Tree Structure
 ```
@@ -46,14 +46,15 @@ CFBot uses Wit's NLP. It's well trained to recognize your message. But still don
 Bash commands to install it in Ubuntu 20.04
 
  ```
-$ pip install -r requirements.txt
-$ export FLASK_APP server
+$ pipenv shell
+$ pipenv run pip install -r requirements.txt
+$ export QUART_APP server
 
 # Set other environment variables
 
-$ flask run
+$ quart run
 
  ```
-
-## Contribution
- Check Facebook Developer and Wit AI for configurations. You can also open an issue if you want to contribute.
+ 
+ ## License
+ This is under MIT License.
